@@ -57,3 +57,8 @@ shape = SubResource("CapsuleShape3D_v4nbw")
 mesh = SubResource("SphereMesh_oulel")
 
 [node name="TestGameScene" parent="." instance=ExtResource("3_oulel")]
+unique_name_in_owner = true
+
+[node name="TestGameScene2" parent="." instance=ExtResource("3_oulel")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -39.853622, 0, 0)

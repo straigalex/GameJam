@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=22 format=3 uid="uid://br5t6nuvh13mf"]
+[gd_resource type="VisualShader" load_steps=33 format=3 uid="uid://br5t6nuvh13mf"]
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_pi0w1"]
 function = 31
@@ -16,15 +16,44 @@ op_type = 3
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_pi0w1"]
 size = Vector2(620, 480)
 expression = "vec3 duv = vec3(4.0 / 500.0, 4.0/ 500.0, 0.0);
-float v1 = texture(sim, UV - duv.xz).y;
-float v2 = texture(sim, UV + duv.xz).y;
-float v3 = texture(sim, UV - duv.zy).y;
-float v4 = texture(sim, UV + duv.zy).y;
+float v1 = texture(sim, UVI - duv.xz).y;
+float v2 = texture(sim, UVI + duv.xz).y;
+float v3 = texture(sim, UVI - duv.zy).y;
+float v4 = texture(sim, UVI + duv.zy).y;
 
 normal = normalize(vec3(v1-v2,v3-v4,0.3));"
 
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_8fxu3"]
+size = Vector2(480, 460)
+expression = "//applies an offset to the UV map
+//this lets us use multiple meshes to represent
+//a single body of water.
+UVO = vec2( (UVI.x * XMULT) + XOFF, (UVI.y * YMULT) + YOFF);"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_m1ohe"]
+parameter_name = "X_Multiplier"
+default_value_enabled = true
+default_value = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_h3slp"]
+parameter_name = "Y_Multiplier"
+default_value_enabled = true
+default_value = 1.0
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_8fxu3"]
+parameter_name = "X_Offset"
+default_value_enabled = true
+
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_pi0w1"]
 input_name = "uv"
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_caocj"]
+parameter_name = "Y_Offset"
+default_value_enabled = true
+
+[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kbele"]
+parameter_name = "FloatParameter2"
+default_value_enabled = true
 
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_m1ohe"]
 parameter_name = "simulation"
@@ -59,8 +88,27 @@ input_name = "vertex"
 
 [sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_8fxu3"]
 
+[sub_resource type="VisualShaderNodeParameterRef" id="VisualShaderNodeParameterRef_866b3"]
+parameter_name = "X_Multiplier"
+
+[sub_resource type="VisualShaderNodeParameterRef" id="VisualShaderNodeParameterRef_kbele"]
+parameter_name = "Y_Multiplier"
+
+[sub_resource type="VisualShaderNodeParameterRef" id="VisualShaderNodeParameterRef_rs5ii"]
+parameter_name = "X_Offset"
+
+[sub_resource type="VisualShaderNodeParameterRef" id="VisualShaderNodeParameterRef_ktd5j"]
+parameter_name = "Y_Offset"
+
 [sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_m1ohe"]
 input_name = "uv"
+
+[sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_2pfhv"]
+size = Vector2(480, 400)
+expression = "//applies an offset to the UV map
+//this lets us use multiple meshes to represent
+//a single body of water.
+UVO = vec2( (UVI.x * XMULT) + XOFF, (UVI.y * YMULT) + YOFF);"
 
 [sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_8fxu3"]
 expanded_output_ports = [0]
@@ -85,13 +133,19 @@ input_name = "normal"
 operator = 2
 
 [resource]
+resource_local_to_scene = true
 code = "shader_type spatial;
 render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, depth_prepass_alpha;
 
 uniform sampler2D simulation;
+uniform float X_Multiplier = 1.0;
+uniform float Y_Multiplier = 1.0;
+uniform float X_Offset = 0.0;
+uniform float Y_Offset = 0.0;
 uniform float Amp = 0.5;
 uniform float FloatParameter = 0.5;
 uniform sampler2D Texture2DParameter : hint_depth_texture;
+uniform float FloatParameter2 = 0.0;
 
 
 
@@ -108,9 +162,36 @@ void vertex() {
 	vec2 n_out2p0 = UV;
 
 
+// ParameterRef:16
+	float n_out16p0 = X_Multiplier;
+
+
+// ParameterRef:17
+	float n_out17p0 = Y_Multiplier;
+
+
+// ParameterRef:18
+	float n_out18p0 = X_Offset;
+
+
+// ParameterRef:19
+	float n_out19p0 = Y_Offset;
+
+
+	vec2 n_out21p0;
+// Expression:21
+	n_out21p0 = vec2(0.0, 0.0);
+	{
+		//applies an offset to the UV map
+		//this lets us use multiple meshes to represent
+		//a single body of water.
+		n_out21p0 = vec2( (n_out2p0.x * n_out16p0) + n_out18p0, (n_out2p0.y * n_out17p0) + n_out19p0);
+	}
+
+
 	vec4 n_out4p0;
 // Texture2D:4
-	n_out4p0 = texture(simulation, n_out2p0);
+	n_out4p0 = texture(simulation, n_out21p0);
 	float n_out4p1 = n_out4p0.r;
 
 
@@ -172,13 +253,44 @@ void fragment() {
 	vec3 n_out14p0 = mix(vec3(n_out13p0.xyz), vec3(n_out12p0.xyz), vec3(n_out10p0));
 
 
+// FloatParameter:21
+	float n_out21p0 = FloatParameter2;
+
+
 // Input:2
 	vec2 n_out2p0 = UV;
 
 
+// FloatParameter:17
+	float n_out17p0 = X_Multiplier;
+
+
+// FloatParameter:18
+	float n_out18p0 = Y_Multiplier;
+
+
+// FloatParameter:19
+	float n_out19p0 = X_Offset;
+
+
+// FloatParameter:20
+	float n_out20p0 = Y_Offset;
+
+
+	vec2 n_out16p0;
+// Expression:16
+	n_out16p0 = vec2(0.0, 0.0);
+	{
+		//applies an offset to the UV map
+		//this lets us use multiple meshes to represent
+		//a single body of water.
+		n_out16p0 = vec2( (n_out2p0.x * n_out17p0) + n_out19p0, (n_out2p0.y * n_out18p0) + n_out20p0);
+	}
+
+
 	vec4 n_out4p0;
 // Texture2D:4
-	n_out4p0 = texture(simulation, n_out2p0);
+	n_out4p0 = texture(simulation, n_out16p0);
 	float n_out4p1 = n_out4p0.r;
 
 
@@ -187,10 +299,10 @@ void fragment() {
 	n_out15p0 = vec3(0.0, 0.0, 0.0);
 	{
 		vec3 duv = vec3(4.0 / 500.0, 4.0/ 500.0, 0.0);
-		float v1 = texture(simulation, UV - duv.xz).y;
-		float v2 = texture(simulation, UV + duv.xz).y;
-		float v3 = texture(simulation, UV - duv.zy).y;
-		float v4 = texture(simulation, UV + duv.zy).y;
+		float v1 = texture(simulation, n_out16p0 - duv.xz).y;
+		float v2 = texture(simulation, n_out16p0 + duv.xz).y;
+		float v3 = texture(simulation, n_out16p0 - duv.zy).y;
+		float v4 = texture(simulation, n_out16p0 + duv.zy).y;
 		
 		n_out15p0 = normalize(vec3(v1-v2,v3-v4,0.3));
 	}
@@ -199,6 +311,7 @@ void fragment() {
 // Output:0
 	ALBEDO = n_out14p0;
 	ALPHA = n_out10p0;
+	METALLIC = n_out21p0;
 	SPECULAR = n_out4p1;
 	NORMAL = n_out15p0;
 
@@ -208,7 +321,7 @@ void fragment() {
 flags/depth_prepass_alpha = true
 nodes/vertex/0/position = Vector2(1300, 200)
 nodes/vertex/2/node = SubResource("VisualShaderNodeInput_m1ohe")
-nodes/vertex/2/position = Vector2(-692.12164, 32.193924)
+nodes/vertex/2/position = Vector2(-1460, -280)
 nodes/vertex/4/node = SubResource("VisualShaderNodeTexture_8fxu3")
 nodes/vertex/4/position = Vector2(-200, 240)
 nodes/vertex/5/node = SubResource("VisualShaderNodeParameterRef_caocj")
@@ -225,10 +338,27 @@ nodes/vertex/10/node = SubResource("VisualShaderNodeInput_h3slp")
 nodes/vertex/10/position = Vector2(520, 40)
 nodes/vertex/11/node = SubResource("VisualShaderNodeVectorOp_8fxu3")
 nodes/vertex/11/position = Vector2(880, 140)
-nodes/vertex/connections = PackedInt32Array(2, 0, 4, 0, 5, 0, 4, 2, 4, 1, 7, 0, 6, 0, 7, 1, 8, 0, 9, 0, 7, 0, 9, 1, 10, 0, 11, 0, 9, 0, 11, 1, 11, 0, 0, 0)
+nodes/vertex/16/node = SubResource("VisualShaderNodeParameterRef_866b3")
+nodes/vertex/16/position = Vector2(-1460, -80)
+nodes/vertex/17/node = SubResource("VisualShaderNodeParameterRef_kbele")
+nodes/vertex/17/position = Vector2(-1460, 40)
+nodes/vertex/18/node = SubResource("VisualShaderNodeParameterRef_rs5ii")
+nodes/vertex/18/position = Vector2(-1460, 160)
+nodes/vertex/19/node = SubResource("VisualShaderNodeParameterRef_ktd5j")
+nodes/vertex/19/position = Vector2(-1460, 280)
+nodes/vertex/21/node = SubResource("VisualShaderNodeExpression_2pfhv")
+nodes/vertex/21/position = Vector2(-840, -200)
+nodes/vertex/21/size = Vector2(480, 400)
+nodes/vertex/21/input_ports = "0,3,UVI;1,0,XMULT;2,0,YMULT;3,0,XOFF;4,0,YOFF;"
+nodes/vertex/21/output_ports = "0,3,UVO;"
+nodes/vertex/21/expression = "//applies an offset to the UV map
+//this lets us use multiple meshes to represent
+//a single body of water.
+UVO = vec2( (UVI.x * XMULT) + XOFF, (UVI.y * YMULT) + YOFF);"
+nodes/vertex/connections = PackedInt32Array(5, 0, 4, 2, 4, 1, 7, 0, 6, 0, 7, 1, 7, 0, 9, 1, 9, 0, 11, 1, 16, 0, 21, 1, 17, 0, 21, 2, 18, 0, 21, 3, 19, 0, 21, 4, 21, 0, 4, 0, 11, 0, 0, 0, 2, 0, 21, 0, 8, 0, 9, 0, 10, 0, 11, 0)
 nodes/fragment/0/position = Vector2(1080, 360)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_pi0w1")
-nodes/fragment/2/position = Vector2(-720, -80)
+nodes/fragment/2/position = Vector2(-1960, -1260)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_m1ohe")
 nodes/fragment/3/position = Vector2(-1320, -320)
 nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_h3slp")
@@ -261,14 +391,33 @@ nodes/fragment/14/position = Vector2(320, 100)
 nodes/fragment/15/node = SubResource("VisualShaderNodeExpression_pi0w1")
 nodes/fragment/15/position = Vector2(-160, -500)
 nodes/fragment/15/size = Vector2(620, 480)
-nodes/fragment/15/input_ports = "0,8,sim;"
+nodes/fragment/15/input_ports = "0,8,sim;1,3,UVI;"
 nodes/fragment/15/output_ports = "0,4,normal;"
 nodes/fragment/15/expression = "vec3 duv = vec3(4.0 / 500.0, 4.0/ 500.0, 0.0);
-float v1 = texture(sim, UV - duv.xz).y;
-float v2 = texture(sim, UV + duv.xz).y;
-float v3 = texture(sim, UV - duv.zy).y;
-float v4 = texture(sim, UV + duv.zy).y;
+float v1 = texture(sim, UVI - duv.xz).y;
+float v2 = texture(sim, UVI + duv.xz).y;
+float v3 = texture(sim, UVI - duv.zy).y;
+float v4 = texture(sim, UVI + duv.zy).y;
 
 normal = normalize(vec3(v1-v2,v3-v4,0.3));"
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 2, 6, 0, 7, 0, 8, 0, 7, 1, 7, 0, 10, 0, 10, 0, 0, 1, 13, 0, 14, 0, 12, 0, 14, 1, 10, 0, 14, 2, 3, 0, 15, 0, 15, 0, 0, 8, 14, 0, 0, 0, 4, 1, 0, 4)
+nodes/fragment/16/node = SubResource("VisualShaderNodeExpression_8fxu3")
+nodes/fragment/16/position = Vector2(-1260, -940)
+nodes/fragment/16/size = Vector2(480, 460)
+nodes/fragment/16/input_ports = "0,3,UVI;1,0,XMULT;2,0,YMULT;3,0,XOFF;4,0,YOFF;"
+nodes/fragment/16/output_ports = "0,3,UVO;"
+nodes/fragment/16/expression = "//applies an offset to the UV map
+//this lets us use multiple meshes to represent
+//a single body of water.
+UVO = vec2( (UVI.x * XMULT) + XOFF, (UVI.y * YMULT) + YOFF);"
+nodes/fragment/17/node = SubResource("VisualShaderNodeFloatParameter_m1ohe")
+nodes/fragment/17/position = Vector2(-1940, -1140)
+nodes/fragment/18/node = SubResource("VisualShaderNodeFloatParameter_h3slp")
+nodes/fragment/18/position = Vector2(-1940, -880)
+nodes/fragment/19/node = SubResource("VisualShaderNodeFloatParameter_8fxu3")
+nodes/fragment/19/position = Vector2(-1940, -620)
+nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_caocj")
+nodes/fragment/20/position = Vector2(-1940, -360)
+nodes/fragment/21/node = SubResource("VisualShaderNodeFloatParameter_kbele")
+nodes/fragment/21/position = Vector2(220, 600)
+nodes/fragment/connections = PackedInt32Array(6, 0, 7, 0, 8, 0, 7, 1, 7, 0, 10, 0, 13, 0, 14, 0, 12, 0, 14, 1, 10, 0, 14, 2, 3, 0, 15, 0, 16, 0, 4, 0, 16, 0, 15, 1, 18, 0, 16, 2, 17, 0, 16, 1, 19, 0, 16, 3, 20, 0, 16, 4, 10, 0, 0, 1, 4, 1, 0, 4, 15, 0, 0, 8, 14, 0, 0, 0, 3, 0, 4, 2, 21, 0, 0, 2, 2, 0, 16, 0)
 nodes/light/0/position = Vector2(540, 160)

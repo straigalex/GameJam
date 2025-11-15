@@ -14,12 +14,12 @@ var submerged = false
 
 func _physics_process(delta: float) -> void:
 	submerged = false
-	var map = hmap.get_image()
+	#var map = hmap.get_image()
 	for f in floats:
-		var wheight = f.get_water_height(map)
-		print(wheight)
-		#var depth = water_height - f.global_position.y
-		var depth = wheight - f.global_position.y
+		#var wheight = f.get_water_height(map)
+		#print(wheight)
+		var depth = water_height - f.global_position.y
+		#var depth = wheight - f.global_position.y
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)

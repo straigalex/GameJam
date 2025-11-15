@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://bg8v8gc4eshws"]
+[gd_scene load_steps=19 format=3 uid="uid://bg8v8gc4eshws"]
 
 [ext_resource type="Shader" uid="uid://dyuekrltpegb0" path="res://gamescene/simulation.gdshader" id="1_8veki"]
 [ext_resource type="Shader" uid="uid://br5t6nuvh13mf" path="res://gamescene/main.tres" id="2_nj4wf"]
 
 [sub_resource type="GDScript" id="GDScript_8veki"]
+resource_local_to_scene = true
 script/source = "extends Node3D
 
 var simtex
@@ -37,20 +38,21 @@ shader_parameter/phase = 0.2
 shader_parameter/attenuation = 0.999
 shader_parameter/deltaUV = 3.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_41f4a"]
-viewport_path = NodePath("Simulation")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rkbcg"]
-resource_local_to_scene = true
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nj4wf"]
 render_priority = 0
 shader = ExtResource("2_nj4wf")
-shader_parameter/simulation = SubResource("ViewportTexture_41f4a")
+shader_parameter/X_Multiplier = 1.0
+shader_parameter/Y_Multiplier = 1.0
+shader_parameter/X_Offset = 0.0
+shader_parameter/Y_Offset = 0.0
 shader_parameter/Amp = 0.5
 shader_parameter/FloatParameter = 0.5
+shader_parameter/FloatParameter2 = 0.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0hup2"]
-material = SubResource("ShaderMaterial_rkbcg")
-size = Vector2(20, 20)
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_nj4wf")
+size = Vector2(10, 10)
 subdivide_width = 1000
 subdivide_depth = 1000
 
@@ -63,6 +65,7 @@ material = SubResource("StandardMaterial3D_nj4wf")
 size = Vector2(15, 15)
 
 [sub_resource type="Environment" id="Environment_nj4wf"]
+resource_local_to_scene = true
 background_mode = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_nj4wf"]
@@ -112,6 +115,7 @@ shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_rkbcg"]
+resource_local_to_scene = true
 material = SubResource("ORMMaterial3D_41f4a")
 
 [node name="TestGameScene" type="Node3D"]
@@ -162,13 +166,13 @@ cull_mask = 524288
 environment = SubResource("Environment_nj4wf")
 projection = 1
 current = true
-size = 20.0
+size = 10.0
 far = 6.0
 
 [node name="SubSimulation" type="SubViewport" parent="."]
 
 [node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.0238764)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12664223, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 mesh = SubResource("SphereMesh_nj4wf")
