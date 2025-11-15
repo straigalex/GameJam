@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://drhaetfip1gl5"]
+[gd_scene load_steps=9 format=3 uid="uid://drhaetfip1gl5"]
 
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="1_5wo1p"]
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="2_v4nbw"]
+[ext_resource type="PackedScene" uid="uid://bg8v8gc4eshws" path="res://gamescene/Test_GameScene.tscn" id="3_oulel"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5wo1p"]
 
@@ -50,3 +51,6 @@ shape = SubResource("CapsuleShape3D_v4nbw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("SphereMesh_oulel")
+
+[node name="TestGameScene" parent="." instance=ExtResource("3_oulel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062278748, 0)
