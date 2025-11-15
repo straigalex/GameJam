@@ -34,7 +34,6 @@ expanded_output_ports = [0]
 source = 5
 
 [sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_8fxu3"]
-default_input_values = [0, 0.0, 1, 0.0, 2, 0.0, 3, 0.0]
 
 [sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_pi0w1"]
 parameter_name = "FloatParameter"
@@ -262,5 +261,5 @@ float v3 = texture(sim, UV - duv.zy).y;
 float v4 = texture(sim, UV + duv.zy).y;
 
 normal = normalize(vec3(v1-v2,v3-v4,0.3));"
-nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 2, 4, 1, 5, 0, 6, 0, 7, 0, 8, 0, 7, 1, 7, 0, 10, 0, 10, 0, 0, 1, 13, 0, 14, 0, 12, 0, 14, 1, 14, 0, 0, 0, 10, 0, 14, 2, 3, 0, 15, 0, 15, 0, 0, 8)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 2, 4, 1, 5, 0, 5, 0, 0, 0, 6, 0, 7, 0, 8, 0, 7, 1, 7, 0, 10, 0, 10, 0, 0, 1, 13, 0, 14, 0, 12, 0, 14, 1, 14, 0, 0, 0, 10, 0, 14, 2, 3, 0, 15, 0, 15, 0, 0, 8)
 nodes/light/0/position = Vector2(540, 160)

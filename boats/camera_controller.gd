@@ -20,3 +20,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		spring_length -= 1
 	if event.is_action_pressed("scroll_down") and spring_length < max_zoom:
 		spring_length += 1
+	
+	if event.is_action_pressed("escape"):
+		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		elif Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

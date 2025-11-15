@@ -1,10 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://cyrkxtyhggewg"]
+[gd_scene load_steps=5 format=3 uid="uid://cyrkxtyhggewg"]
 
 [ext_resource type="Script" uid="uid://vxha4d754wnq" path="res://boats/buoy.gd" id="1_ut851"]
 [ext_resource type="PackedScene" uid="uid://nru1t2dq5mos" path="res://assets/buoy.blend" id="2_57sdj"]
+[ext_resource type="PackedScene" uid="uid://cqi4y3unf62y4" path="res://gamescene/checkpoint.tscn" id="3_rfe18"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_57sdj"]
-size = Vector3(1, 4.0082397, 1)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_57sdj"]
+radius = 0.944
+height = 3.982
 
 [node name="Buoy" type="RigidBody3D"]
 script = ExtResource("1_ut851")
@@ -12,5 +14,6 @@ script = ExtResource("1_ut851")
 [node name="buoy" parent="." instance=ExtResource("2_57sdj")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.010406494, 0)
-shape = SubResource("BoxShape3D_57sdj")
+shape = SubResource("CapsuleShape3D_57sdj")
+
+[node name="Checkpoint" parent="." instance=ExtResource("3_rfe18")]

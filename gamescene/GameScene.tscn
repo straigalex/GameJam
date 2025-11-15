@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://drhaetfip1gl5"]
+[gd_scene load_steps=10 format=3 uid="uid://drhaetfip1gl5"]
 
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="1_5wo1p"]
+[ext_resource type="Script" uid="uid://cfm64ao8k2igc" path="res://gamescene/GameScene.gd" id="1_g1wnh"]
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="2_v4nbw"]
 [ext_resource type="PackedScene" uid="uid://bg8v8gc4eshws" path="res://gamescene/Test_GameScene.tscn" id="3_oulel"]
 
@@ -21,36 +22,35 @@ height = 43.49
 radius = 20.0
 height = 10.0
 
-[node name="GameScene" type="Node3D"]
+[node name="GameScene" type="Node3D" node_paths=PackedStringArray("checkpoints", "player")]
+script = ExtResource("1_g1wnh")
+checkpoints = [NodePath("Buoy")]
+player = NodePath("PlayerBoat")
 
-[node name="PlayerBoat" parent="." instance=ExtResource("1_5wo1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28878975, 2.1695988, -0.38592625)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Water" type="MeshInstance3D" parent="."]
 transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -0.030986786, 0.060009956, 0.0519495)
 mesh = SubResource("PlaneMesh_5wo1p")
 skeleton = NodePath("../PlayerBoat/Camera3D")
 surface_material_override/0 = SubResource("StandardMaterial3D_v4nbw")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.94832367, 0.31730464, 0, -0.31730464, 0.94832367, 0, 5, 0)
 
-[node name="Buoy" parent="." instance=ExtResource("2_v4nbw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.959749, 7.194574, -7.5034733)
-float_force = 0.1
-
-[node name="Buoy2" parent="." instance=ExtResource("2_v4nbw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.467705, 0, 0)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="."]
+[node name="Island" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.403976, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_v4nbw")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Island"]
 shape = SubResource("CapsuleShape3D_v4nbw")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Island"]
 mesh = SubResource("SphereMesh_oulel")
 
 [node name="TestGameScene" parent="." instance=ExtResource("3_oulel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.062278748, 0)
+visible = false
+
+[node name="PlayerBoat" parent="." instance=ExtResource("1_5wo1p")]
+
+[node name="Buoy" parent="." instance=ExtResource("2_v4nbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.410173)
