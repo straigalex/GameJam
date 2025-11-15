@@ -7,13 +7,19 @@ extends RigidBody3D
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var floats = $FloatContainer.get_children()
 
+var hmap:ViewportTexture
+
 const water_height = 0.0
 var submerged = false
 
 func _physics_process(delta: float) -> void:
 	submerged = false
+	var map = hmap.get_image()
 	for f in floats:
-		var depth = water_height - f.global_position.y
+		var wheight = f.get_water_height(map)
+		print(wheight)
+		#var depth = water_height - f.global_position.y
+		var depth = wheight - f.global_position.y
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)

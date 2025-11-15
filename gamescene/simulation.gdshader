@@ -14,8 +14,8 @@ void vertex() {
 }
 
 void fragment() {
-	float dv = 1.0 / 512.0;
-	float du = 1.0 / 512.0;
+	float dv = 1.0 / 500.0;
+	float du = 1.0 / 500.0;
 	vec3 duv = vec3(du, dv, 0) * deltaUV;
 	
 	vec3 c = texture(sim_tex, UV).rgb;
