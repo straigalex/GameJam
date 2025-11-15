@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://drhaetfip1gl5"]
+[gd_scene load_steps=8 format=3 uid="uid://drhaetfip1gl5"]
 
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="1_5wo1p"]
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="2_v4nbw"]
@@ -8,6 +8,17 @@
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4nbw"]
 transparency = 1
 albedo_color = Color(0.28235295, 0.5921569, 1, 0.8156863)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_v4nbw"]
+bounce = 0.84
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v4nbw"]
+radius = 20.0
+height = 43.49
+
+[sub_resource type="SphereMesh" id="SphereMesh_oulel"]
+radius = 20.0
+height = 10.0
 
 [node name="GameScene" type="Node3D"]
 
@@ -29,3 +40,13 @@ float_force = 0.1
 
 [node name="Buoy2" parent="." instance=ExtResource("2_v4nbw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.467705, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.403976, 0, 0)
+physics_material_override = SubResource("PhysicsMaterial_v4nbw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("CapsuleShape3D_v4nbw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("SphereMesh_oulel")

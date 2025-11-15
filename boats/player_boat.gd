@@ -18,12 +18,12 @@ func _physics_process(delta: float) -> void:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)
 	
-	apply_force(Vector3.FORWARD * 20)
+	apply_central_force(transform.basis * Vector3.FORWARD * 20)
 
 	if Input.is_action_pressed("turn_left"):
-		apply_torque(Vector3(0,5,0))
+		apply_torque(Vector3(0,20,0))
 	if Input.is_action_pressed("turn_right"):
-		apply_torque(Vector3(0,-5,0))
+		apply_torque(Vector3(0,-20,0))
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if submerged:
