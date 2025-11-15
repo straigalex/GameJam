@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bg8v8gc4eshws"]
+[gd_scene load_steps=18 format=3 uid="uid://bg8v8gc4eshws"]
 
 [ext_resource type="Shader" uid="uid://dyuekrltpegb0" path="res://gamescene/simulation.gdshader" id="1_8veki"]
 [ext_resource type="Shader" uid="uid://br5t6nuvh13mf" path="res://gamescene/main.tres" id="2_nj4wf"]
@@ -19,6 +19,7 @@ func _ready():
 	
 	water.mesh.surface_get_material(0).set_shader_parameter('simulation',sim_tex)
 	
+	$Node3D/AnimationPlayer.play()
 	pass
 "
 
@@ -51,6 +52,58 @@ subdivide_depth = 500
 [sub_resource type="PlaneMesh" id="PlaneMesh_nj4wf"]
 size = Vector2(15, 15)
 
+[sub_resource type="Environment" id="Environment_nj4wf"]
+background_mode = 1
+
+[sub_resource type="SphereMesh" id="SphereMesh_nj4wf"]
+
+[sub_resource type="Animation" id="Animation_nj4wf"]
+resource_name = "new_animation"
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 3.5, 0, 0.5, 1, 0, 3.5, 1, 1, 1, 0, 3.5, 0)
+
+[sub_resource type="Animation" id="Animation_41f4a"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 3.5, 0)
+
+[sub_resource type="Animation" id="Animation_rkbcg"]
+resource_name = "anim"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 1, 0, 0, 5, 2.0333333, 1, 0, 0, 0)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rkbcg"]
+_data = {
+&"RESET": SubResource("Animation_41f4a"),
+&"anim": SubResource("Animation_rkbcg"),
+&"new_animation": SubResource("Animation_nj4wf")
+}
+
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_41f4a"]
+shading_mode = 0
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_rkbcg"]
+material = SubResource("ORMMaterial3D_41f4a")
+
 [node name="TestGameScene" type="Node3D"]
 script = SubResource("GDScript_8veki")
 
@@ -67,7 +120,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Water" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.012764156, 0.89854693, -1.5202118)
 mesh = SubResource("PlaneMesh_0hup2")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -75,7 +127,7 @@ transform = Transform3D(-2.8512225e-08, -0.757975, 0.65228367, -3.313214e-08, 0.
 cull_mask = 524287
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9588959)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.627233, -0.9588959)
 mesh = SubResource("PlaneMesh_nj4wf")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -88,7 +140,25 @@ render_target_update_mode = 4
 [node name="WaterCam" type="Camera3D" parent="Collision"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -5, 0)
 cull_mask = 524288
+environment = SubResource("Environment_nj4wf")
 projection = 1
 size = 10.0
 
 [node name="SubSimulation" type="SubViewport" parent="."]
+
+[node name="Node3D" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.7919002)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+mesh = SubResource("SphereMesh_nj4wf")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Node3D"]
+deterministic = true
+reset_on_save = false
+libraries = {
+&"": SubResource("AnimationLibrary_rkbcg")
+}
+
+[node name="wet" type="MeshInstance3D" parent="Node3D"]
+layers = 524288
+mesh = SubResource("SphereMesh_rkbcg")
