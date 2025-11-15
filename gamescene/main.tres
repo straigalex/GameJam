@@ -1,0 +1,55 @@
+[gd_resource type="VisualShader" load_steps=5 format=3 uid="uid://br5t6nuvh13mf"]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_pi0w1"]
+input_name = "uv"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_m1ohe"]
+parameter_name = "simulation"
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_h3slp"]
+expanded_output_ports = [0]
+source = 5
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_8fxu3"]
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform sampler2D simulation;
+
+
+
+void fragment() {
+// Input:2
+	vec2 n_out2p0 = UV;
+
+
+	vec4 n_out4p0;
+// Texture2D:4
+	n_out4p0 = texture(simulation, n_out2p0);
+	float n_out4p1 = n_out4p0.r;
+
+
+// VectorCompose:5
+	float n_in5p1 = 0.00000;
+	float n_in5p2 = 0.00000;
+	vec3 n_out5p0 = vec3(n_out4p1, n_in5p1, n_in5p2);
+
+
+// Output:0
+	ALBEDO = n_out5p0;
+
+
+}
+"
+nodes/fragment/0/position = Vector2(840, 340)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_pi0w1")
+nodes/fragment/2/position = Vector2(-626.99396, 238.30763)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_m1ohe")
+nodes/fragment/3/position = Vector2(-620, 560)
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_h3slp")
+nodes/fragment/4/position = Vector2(-40, 440)
+nodes/fragment/5/node = SubResource("VisualShaderNodeVectorCompose_8fxu3")
+nodes/fragment/5/position = Vector2(368.62366, 479.24)
+nodes/fragment/connections = PackedInt32Array(2, 0, 4, 0, 3, 0, 4, 2, 4, 1, 5, 0, 5, 0, 0, 0)
