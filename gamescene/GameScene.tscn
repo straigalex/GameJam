@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://drhaetfip1gl5"]
+[gd_scene load_steps=11 format=3 uid="uid://drhaetfip1gl5"]
 
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="1_5wo1p"]
 [ext_resource type="Script" uid="uid://cfm64ao8k2igc" path="res://gamescene/GameScene.gd" id="1_g1wnh"]
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="2_v4nbw"]
 [ext_resource type="PackedScene" uid="uid://bg8v8gc4eshws" path="res://gamescene/Test_GameScene.tscn" id="3_oulel"]
+[ext_resource type="PackedScene" uid="uid://bsbtpp84pdo2k" path="res://ui/GameUI.tscn" id="5_q14gy"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5wo1p"]
 
@@ -22,9 +23,8 @@ height = 43.49
 radius = 20.0
 height = 10.0
 
-[node name="GameScene" type="Node3D" node_paths=PackedStringArray("checkpoints", "player")]
+[node name="GameScene" type="Node3D" node_paths=PackedStringArray("player")]
 script = ExtResource("1_g1wnh")
-checkpoints = [NodePath("Buoy")]
 player = NodePath("PlayerBoat")
 
 [node name="Water" type="MeshInstance3D" parent="."]
@@ -52,5 +52,14 @@ visible = false
 
 [node name="PlayerBoat" parent="." instance=ExtResource("1_5wo1p")]
 
-[node name="Buoy" parent="." instance=ExtResource("2_v4nbw")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8.410173)
+[node name="BuoyContainer" type="Node3D" parent="."]
+
+[node name="Buoy" parent="BuoyContainer" instance=ExtResource("2_v4nbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.755205)
+
+[node name="Buoy2" parent="BuoyContainer" instance=ExtResource("2_v4nbw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.003932, 0, -12.21203)
+checkpoint_position = 2
+
+[node name="GameUI" parent="." instance=ExtResource("5_q14gy")]
+unique_name_in_owner = true

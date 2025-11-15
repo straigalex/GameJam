@@ -1,19 +1,49 @@
-[gd_scene load_steps=5 format=3 uid="uid://cyrkxtyhggewg"]
+[gd_scene load_steps=7 format=3 uid="uid://cyrkxtyhggewg"]
 
 [ext_resource type="Script" uid="uid://vxha4d754wnq" path="res://boats/buoy.gd" id="1_ut851"]
 [ext_resource type="PackedScene" uid="uid://nru1t2dq5mos" path="res://assets/buoy.blend" id="2_57sdj"]
-[ext_resource type="PackedScene" uid="uid://cqi4y3unf62y4" path="res://gamescene/checkpoint.tscn" id="3_rfe18"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_57sdj"]
 radius = 0.944
 height = 3.982
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_57sdj"]
+radius = 4.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rfe18"]
+top_radius = 4.0
+bottom_radius = 4.0
+height = 0.001
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v4n5a"]
+transparency = 1
+albedo_color = Color(0, 0.64705884, 0, 0.23137255)
+
 [node name="Buoy" type="RigidBody3D"]
 script = ExtResource("1_ut851")
+checkpoint_position = 1
 
-[node name="buoy" parent="." instance=ExtResource("2_57sdj")]
+[node name="BuoyMesh" parent="." instance=ExtResource("2_57sdj")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_57sdj")
 
-[node name="Checkpoint" parent="." instance=ExtResource("3_rfe18")]
+[node name="CheckpointArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CheckpointArea"]
+shape = SubResource("SphereShape3D_57sdj")
+
+[node name="CheckpointAreaVisual" type="MeshInstance3D" parent="CheckpointArea/CollisionShape3D"]
+mesh = SubResource("CylinderMesh_rfe18")
+surface_material_override/0 = SubResource("StandardMaterial3D_v4n5a")
+
+[node name="Marker3D" type="Marker3D" parent="CheckpointArea"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6951365, 0)
+text = "Missing Checkpoint ID"
+
+[connection signal="body_entered" from="CheckpointArea" to="." method="_on_checkpoint_area_body_entered"]
