@@ -34,20 +34,18 @@ shader_parameter/phase = 0.2
 shader_parameter/attenuation = 0.999
 shader_parameter/deltaUV = 3.0
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_41f4a"]
-viewport_path = NodePath("Simulation")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rkbcg"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_nj4wf")
-shader_parameter/simulation = SubResource("ViewportTexture_41f4a")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0hup2"]
 material = SubResource("ShaderMaterial_rkbcg")
-size = Vector2(40, 40)
-subdivide_width = 2000
-subdivide_depth = 2000
+size = Vector2(10, 10)
+subdivide_width = 1000
+subdivide_depth = 1000
+
+[sub_resource type="BoxMesh" id="BoxMesh_nj4wf"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_nj4wf"]
 size = Vector2(15, 15)
@@ -122,12 +120,17 @@ grow_vertical = 2
 [node name="Water" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_0hup2")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(9.278516, 0, 0, 0, 5.9842944, 0, 0, 0, 1, 0, 0, 5.5794525)
+mesh = SubResource("BoxMesh_nj4wf")
+
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(-2.8512225e-08, -0.757975, 0.65228367, -3.313214e-08, 0.65228367, 0.757975, -1, 0, -4.371139e-08, 5.4299855, 5.065712, 0.8586159)
 cull_mask = 524287
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.627233, -0.9588959)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.9215045, -0.9588959)
+layers = 524289
 mesh = SubResource("PlaneMesh_nj4wf")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -142,7 +145,8 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -
 cull_mask = 524288
 environment = SubResource("Environment_nj4wf")
 projection = 1
-size = 40.0
+current = true
+size = 10.0
 
 [node name="SubSimulation" type="SubViewport" parent="."]
 

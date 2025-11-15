@@ -28,7 +28,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28878975, 2.1695988, -0.38
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -0.030986786, 0.060009956, 0.0519495)
-visible = false
 mesh = SubResource("PlaneMesh_5wo1p")
 skeleton = NodePath("../PlayerBoat/Camera3D")
 surface_material_override/0 = SubResource("StandardMaterial3D_v4nbw")
