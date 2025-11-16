@@ -1,0 +1,106 @@
+[gd_scene load_steps=12 format=3 uid="uid://dgoryobiub8kq"]
+
+[ext_resource type="Shader" uid="uid://dyuekrltpegb0" path="res://gamescene/simulation.gdshader" id="1_hq6h0"]
+[ext_resource type="Shader" uid="uid://br5t6nuvh13mf" path="res://gamescene/main.tres" id="2_1ynhv"]
+
+[sub_resource type="GDScript" id="GDScript_nj4wf"]
+script/source = "extends Node3D
+
+@onready var cam = $Collision/WaterCam
+var simtex:ViewportTexture
+
+func _ready():
+	#cam.global_position.x = global_position.x
+	#cam.global_position.z = global_position.z
+	simtex = $Simulation.get_texture()
+	pass
+
+func update_camera():
+	cam.global_position.x = global_position.x
+	cam.global_position.z = global_position.z
+"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hq6h0"]
+viewport_path = NodePath("Collision")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_1ynhv"]
+viewport_path = NodePath("SubSimulation")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_edp6i"]
+resource_local_to_scene = true
+shader = ExtResource("1_hq6h0")
+shader_parameter/sim_tex = SubResource("ViewportTexture_1ynhv")
+shader_parameter/col_tex = SubResource("ViewportTexture_hq6h0")
+shader_parameter/phase = 0.2
+shader_parameter/attenuation = 0.999
+shader_parameter/deltaUV = 3.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_h1sa2"]
+viewport_path = NodePath("Simulation")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_edp6i"]
+viewport_path = NodePath("Simulation")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0tjwo"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_1ynhv")
+shader_parameter/simulation = SubResource("ViewportTexture_edp6i")
+shader_parameter/X_Multiplier = 1.0
+shader_parameter/Y_Multiplier = 1.0
+shader_parameter/X_Offset = 0.0
+shader_parameter/Y_Offset = 0.0
+shader_parameter/Amp = 0.5
+shader_parameter/FloatParameter = 0.5
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0hup2"]
+resource_local_to_scene = true
+material = SubResource("ShaderMaterial_0tjwo")
+size = Vector2(40, 40)
+subdivide_width = 1000
+subdivide_depth = 1000
+
+[sub_resource type="Environment" id="Environment_nj4wf"]
+resource_local_to_scene = true
+background_mode = 1
+
+[node name="Sim" type="Node3D"]
+script = SubResource("GDScript_nj4wf")
+
+[node name="Simulation" type="SubViewport" parent="."]
+size = Vector2i(500, 500)
+render_target_clear_mode = 2
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="Simulation"]
+material = SubResource("ShaderMaterial_edp6i")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubSimulation" type="SubViewport" parent="."]
+size = Vector2i(500, 500)
+
+[node name="Sprite2D" type="Sprite2D" parent="SubSimulation"]
+texture = SubResource("ViewportTexture_h1sa2")
+offset = Vector2(250, 250)
+
+[node name="Water" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_0hup2")
+skeleton = NodePath("../..")
+
+[node name="Collision" type="SubViewport" parent="."]
+size = Vector2i(500, 500)
+render_target_clear_mode = 2
+render_target_update_mode = 4
+
+[node name="WaterCam" type="Camera3D" parent="Collision"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -5, 0)
+cull_mask = 524288
+environment = SubResource("Environment_nj4wf")
+projection = 1
+current = true
+size = 40.0
+far = 45.0

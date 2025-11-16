@@ -33,10 +33,10 @@ void fragment() {
 	
 	float prevCol = texture(sim_tex, UV).b;
 	
-	if(col > 0.0001 && prevCol <= 0.0001){
+	if(col > 0.000001 && prevCol <= 0.000001){
 		p += col * 0.5;
 	}
-	if(prevCol > 0.0001 && col <= 0.0001){
+	if(prevCol > 0.000001 && col <= 0.000001){
 		p -= prevCol * 0.5;
 	}
 	

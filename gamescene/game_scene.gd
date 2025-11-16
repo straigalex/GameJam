@@ -1,5 +1,5 @@
 extends Node3D
 
 func _ready():
-	$PlayerBoat.hmap = $TestGameScene.simtex
+	$PlayerBoat.hmap = $Ocean.tiles
 	pass

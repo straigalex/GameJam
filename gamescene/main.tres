@@ -1,4 +1,4 @@
-[gd_resource type="VisualShader" load_steps=33 format=3 uid="uid://br5t6nuvh13mf"]
+[gd_resource type="VisualShader" load_steps=37 format=3 uid="uid://br5t6nuvh13mf"]
 
 [sub_resource type="VisualShaderNodeFloatFunc" id="VisualShaderNodeFloatFunc_pi0w1"]
 function = 31
@@ -51,9 +51,20 @@ input_name = "uv"
 parameter_name = "Y_Offset"
 default_value_enabled = true
 
-[sub_resource type="VisualShaderNodeFloatParameter" id="VisualShaderNodeFloatParameter_kbele"]
-parameter_name = "FloatParameter2"
-default_value_enabled = true
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_866b3"]
+input_name = "screen_uv"
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_rs5ii"]
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ktd5j"]
+source = 1
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_pi0w1"]
+default_input_values = [0, Vector3(0, 0, 0), 1, Vector3(1, 1, 1), 2, Vector3(0.9, 0.9, 0.9)]
+op_type = 3
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_pi0w1"]
+constant = 0.8
 
 [sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_m1ohe"]
 parameter_name = "simulation"
@@ -70,7 +81,8 @@ default_value = 0.5
 [sub_resource type="VisualShaderNodeExpression" id="VisualShaderNodeExpression_m1ohe"]
 size = Vector2(640.00006, 340)
 expression = "float d = texture(DEPTH_TEXTURE, SCREEN_UV).r;
-//d = d * 2.0 - 1.0;
+//d = d * 2.0 - 1.0;depth = d * 0.1;
+
 d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
 d = d + VERTEX.z;
 //depth = d * 0.1;
@@ -143,9 +155,9 @@ uniform float Y_Multiplier = 1.0;
 uniform float X_Offset = 0.0;
 uniform float Y_Offset = 0.0;
 uniform float Amp = 0.5;
+uniform sampler2D screen_tex_frg_23 : hint_screen_texture;
 uniform float FloatParameter = 0.5;
 uniform sampler2D Texture2DParameter : hint_depth_texture;
-uniform float FloatParameter2 = 0.0;
 
 
 
@@ -218,43 +230,8 @@ void vertex() {
 }
 
 void fragment() {
-// ColorConstant:13
-	vec4 n_out13p0 = vec4(0.125125, 0.215620, 0.708105, 1.000000);
-
-
-// ColorConstant:12
-	vec4 n_out12p0 = vec4(0.145098, 0.858824, 1.000000, 1.000000);
-
-
-// FloatParameter:6
-	float n_out6p0 = FloatParameter;
-
-
-	float n_out7p0;
-	float n_out7p1;
-// Expression:7
-	n_out7p0 = 0.0;
-	n_out7p1 = 0.0;
-	{
-		float d = texture(Texture2DParameter, SCREEN_UV).r;
-		//d = d * 2.0 - 1.0;
-		d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
-		d = d + VERTEX.z;
-		//n_out7p0 = d * 0.1;
-		n_out7p0 = exp(-d * n_out6p0);
-	}
-
-
-// FloatFunc:10
-	float n_out10p0 = 1.0 - n_out7p0;
-
-
-// Mix:14
-	vec3 n_out14p0 = mix(vec3(n_out13p0.xyz), vec3(n_out12p0.xyz), vec3(n_out10p0));
-
-
-// FloatParameter:21
-	float n_out21p0 = FloatParameter2;
+// Input:21
+	vec2 n_out21p0 = SCREEN_UV;
 
 
 // Input:2
@@ -288,12 +265,6 @@ void fragment() {
 	}
 
 
-	vec4 n_out4p0;
-// Texture2D:4
-	n_out4p0 = texture(simulation, n_out16p0);
-	float n_out4p1 = n_out4p0.r;
-
-
 	vec3 n_out15p0;
 // Expression:15
 	n_out15p0 = vec3(0.0, 0.0, 0.0);
@@ -308,11 +279,69 @@ void fragment() {
 	}
 
 
+// FloatOp:22
+	float n_out22p0 = n_out21p0.x + n_out15p0.x;
+
+
+	vec4 n_out23p0;
+// Texture2D:23
+	n_out23p0 = texture(screen_tex_frg_23, vec2(n_out22p0));
+
+
+// ColorConstant:13
+	vec4 n_out13p0 = vec4(0.125125, 0.215620, 0.708105, 1.000000);
+
+
+// ColorConstant:12
+	vec4 n_out12p0 = vec4(0.145098, 0.858824, 1.000000, 1.000000);
+
+
+// FloatParameter:6
+	float n_out6p0 = FloatParameter;
+
+
+	float n_out7p0;
+	float n_out7p1;
+// Expression:7
+	n_out7p0 = 0.0;
+	n_out7p1 = 0.0;
+	{
+		float d = texture(Texture2DParameter, SCREEN_UV).r;
+		//d = d * 2.0 - 1.0;n_out7p0 = d * 0.1;
+		
+		d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
+		d = d + VERTEX.z;
+		//n_out7p0 = d * 0.1;
+		n_out7p0 = exp(-d * n_out6p0);
+	}
+
+
+// Mix:14
+	vec3 n_out14p0 = mix(vec3(n_out13p0.xyz), vec3(n_out12p0.xyz), vec3(n_out7p0));
+
+
+// FloatConstant:25
+	float n_out25p0 = 0.800000;
+
+
+// Mix:24
+	vec3 n_out24p0 = mix(vec3(n_out23p0.xyz), n_out14p0, vec3(n_out25p0));
+
+
+// FloatFunc:10
+	float n_out10p0 = 1.0 - n_out7p0;
+
+
+	vec4 n_out4p0;
+// Texture2D:4
+	n_out4p0 = texture(simulation, n_out16p0);
+	float n_out4p1 = n_out4p0.r;
+
+
 // Output:0
-	ALBEDO = n_out14p0;
+	ALBEDO = n_out24p0;
 	ALPHA = n_out10p0;
-	METALLIC = n_out21p0;
-	SPECULAR = n_out4p1;
+	ROUGHNESS = n_out4p1;
 	NORMAL = n_out15p0;
 
 
@@ -355,12 +384,12 @@ nodes/vertex/21/expression = "//applies an offset to the UV map
 //this lets us use multiple meshes to represent
 //a single body of water.
 UVO = vec2( (UVI.x * XMULT) + XOFF, (UVI.y * YMULT) + YOFF);"
-nodes/vertex/connections = PackedInt32Array(5, 0, 4, 2, 4, 1, 7, 0, 6, 0, 7, 1, 7, 0, 9, 1, 9, 0, 11, 1, 16, 0, 21, 1, 17, 0, 21, 2, 18, 0, 21, 3, 19, 0, 21, 4, 21, 0, 4, 0, 11, 0, 0, 0, 2, 0, 21, 0, 8, 0, 9, 0, 10, 0, 11, 0)
-nodes/fragment/0/position = Vector2(1080, 360)
+nodes/vertex/connections = PackedInt32Array(5, 0, 4, 2, 4, 1, 7, 0, 6, 0, 7, 1, 7, 0, 9, 1, 9, 0, 11, 1, 16, 0, 21, 1, 17, 0, 21, 2, 18, 0, 21, 3, 19, 0, 21, 4, 8, 0, 9, 0, 10, 0, 11, 0, 2, 0, 21, 0, 21, 0, 4, 0, 11, 0, 0, 0)
+nodes/fragment/0/position = Vector2(1440, 240)
 nodes/fragment/2/node = SubResource("VisualShaderNodeInput_pi0w1")
 nodes/fragment/2/position = Vector2(-1960, -1260)
 nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_m1ohe")
-nodes/fragment/3/position = Vector2(-1320, -320)
+nodes/fragment/3/position = Vector2(-1360, -40)
 nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_h3slp")
 nodes/fragment/4/position = Vector2(-260, 380)
 nodes/fragment/6/node = SubResource("VisualShaderNodeFloatParameter_pi0w1")
@@ -371,7 +400,8 @@ nodes/fragment/7/size = Vector2(640.00006, 340)
 nodes/fragment/7/input_ports = "0,0,murkiness;1,8,DEPTH_TEXTURE;"
 nodes/fragment/7/output_ports = "0,0,depth;1,0,abv;"
 nodes/fragment/7/expression = "float d = texture(DEPTH_TEXTURE, SCREEN_UV).r;
-//d = d * 2.0 - 1.0;
+//d = d * 2.0 - 1.0;depth = d * 0.1;
+
 d = PROJECTION_MATRIX[3][2] / (d + PROJECTION_MATRIX[2][2]);
 d = d + VERTEX.z;
 //depth = d * 0.1;
@@ -389,7 +419,7 @@ nodes/fragment/13/position = Vector2(-40, 80)
 nodes/fragment/14/node = SubResource("VisualShaderNodeMix_h3slp")
 nodes/fragment/14/position = Vector2(320, 100)
 nodes/fragment/15/node = SubResource("VisualShaderNodeExpression_pi0w1")
-nodes/fragment/15/position = Vector2(-160, -500)
+nodes/fragment/15/position = Vector2(-340, -680)
 nodes/fragment/15/size = Vector2(620, 480)
 nodes/fragment/15/input_ports = "0,8,sim;1,3,UVI;"
 nodes/fragment/15/output_ports = "0,4,normal;"
@@ -417,7 +447,15 @@ nodes/fragment/19/node = SubResource("VisualShaderNodeFloatParameter_8fxu3")
 nodes/fragment/19/position = Vector2(-1940, -620)
 nodes/fragment/20/node = SubResource("VisualShaderNodeFloatParameter_caocj")
 nodes/fragment/20/position = Vector2(-1940, -360)
-nodes/fragment/21/node = SubResource("VisualShaderNodeFloatParameter_kbele")
-nodes/fragment/21/position = Vector2(220, 600)
-nodes/fragment/connections = PackedInt32Array(6, 0, 7, 0, 8, 0, 7, 1, 7, 0, 10, 0, 13, 0, 14, 0, 12, 0, 14, 1, 10, 0, 14, 2, 3, 0, 15, 0, 16, 0, 4, 0, 16, 0, 15, 1, 18, 0, 16, 2, 17, 0, 16, 1, 19, 0, 16, 3, 20, 0, 16, 4, 10, 0, 0, 1, 4, 1, 0, 4, 15, 0, 0, 8, 14, 0, 0, 0, 3, 0, 4, 2, 21, 0, 0, 2, 2, 0, 16, 0)
+nodes/fragment/21/node = SubResource("VisualShaderNodeInput_866b3")
+nodes/fragment/21/position = Vector2(140, -940)
+nodes/fragment/22/node = SubResource("VisualShaderNodeFloatOp_rs5ii")
+nodes/fragment/22/position = Vector2(560, -700)
+nodes/fragment/23/node = SubResource("VisualShaderNodeTexture_ktd5j")
+nodes/fragment/23/position = Vector2(800, -560)
+nodes/fragment/24/node = SubResource("VisualShaderNodeMix_pi0w1")
+nodes/fragment/24/position = Vector2(1080, -220)
+nodes/fragment/25/node = SubResource("VisualShaderNodeFloatConstant_pi0w1")
+nodes/fragment/25/position = Vector2(800, -220)
+nodes/fragment/connections = PackedInt32Array(6, 0, 7, 0, 8, 0, 7, 1, 13, 0, 14, 0, 12, 0, 14, 1, 3, 0, 15, 0, 16, 0, 15, 1, 18, 0, 16, 2, 17, 0, 16, 1, 19, 0, 16, 3, 20, 0, 16, 4, 3, 0, 4, 2, 2, 0, 16, 0, 16, 0, 4, 0, 15, 0, 0, 8, 15, 0, 22, 1, 21, 0, 22, 0, 22, 0, 23, 0, 4, 1, 0, 3, 10, 0, 0, 1, 23, 0, 24, 0, 25, 0, 24, 2, 14, 0, 24, 1, 24, 0, 0, 0, 7, 0, 10, 0, 7, 0, 14, 2)
 nodes/light/0/position = Vector2(540, 160)
