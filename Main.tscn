@@ -30,5 +30,4 @@ unique_name_in_owner = true
 [node name="Ocean" parent="." instance=ExtResource("5_fos0i")]
 
 [node name="PlayerBoat" parent="." instance=ExtResource("2_uu6xs")]
-mass = 3.0
-float_force = 0.05
+float_force = 1.0
