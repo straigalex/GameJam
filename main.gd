@@ -7,6 +7,8 @@ extends Node
 @export var player: RigidBody3D
 
 func _ready() -> void:
+	$PlayerBoat.hmap = $Ocean.tiles
+
 	LevelManager.load_level("res://Levels/level1.tscn")
 
 	GameState.set_ui_node(game_ui)
