@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://dwwuyibgiv77w"]
+
+[ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="1_fy36t"]
+[ext_resource type="PackedScene" uid="uid://6o74f8i86s3" path="res://assets/startline.tscn" id="2_njhy2"]
+[ext_resource type="PackedScene" uid="uid://bsctpcri84ktt" path="res://assets/finishline.tscn" id="3_m6f6w"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fy36t"]
+bounce = 0.84
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_njhy2"]
+radius = 20.0
+height = 43.49
+
+[sub_resource type="SphereMesh" id="SphereMesh_m6f6w"]
+radius = 20.0
+height = 10.0
+
+[node name="Level1" type="Node3D"]
+
+[node name="Buoy" parent="." instance=ExtResource("1_fy36t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.079176, 0, -33.710102)
+checkpoint_position = 1
+
+[node name="Buoy2" parent="." instance=ExtResource("1_fy36t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -59.266243)
+checkpoint_position = 2
+
+[node name="Buoy3" parent="." instance=ExtResource("1_fy36t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.994502, 0, -42.55803)
+checkpoint_position = 3
+required_direction = 1
+
+[node name="StartLine" parent="." instance=ExtResource("2_njhy2")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -4.7670803, 0, -18.56514)
+
+[node name="FinishLine" parent="." instance=ExtResource("3_m6f6w")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -4.8893433, 0, -83.89363)
+
+[node name="Island" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.97557, 0, -70.04332)
+physics_material_override = SubResource("PhysicsMaterial_fy36t")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Island"]
+shape = SubResource("CapsuleShape3D_njhy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Island"]
+mesh = SubResource("SphereMesh_m6f6w")

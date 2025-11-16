@@ -1,0 +1,25 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7enriilk5fko"]
+
+[ext_resource type="Script" uid="uid://cfm64ao8k2igc" path="res://gamescene/GameScene.gd" id="1_2d3np"]
+[ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="2_leghp"]
+[ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="3_2d3np"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2d3np"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sbolc"]
+transparency = 1
+albedo_color = Color(0.28235295, 0.5921569, 1, 0.8156863)
+
+[node name="RaceManager" type="Node"]
+script = ExtResource("1_2d3np")
+
+[node name="Buoy" parent="." instance=ExtResource("3_2d3np")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.6673026)
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -0.3238964, 0.093006134, -0.76704025)
+mesh = SubResource("PlaneMesh_2d3np")
+skeleton = NodePath("../PlayerBoat/Camera3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_sbolc")
+
+[node name="PlayerBoat" parent="." instance=ExtResource("2_leghp")]
