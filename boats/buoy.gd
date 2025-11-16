@@ -89,7 +89,7 @@ func _on_checkpoint_area_body_entered(body: Node3D) -> void:
 
 
 func _on_checkpoint_area_body_exited(body: Node3D) -> void:
-	if body.is_in_group("Player") and Globals.current_checkpoint > checkpoint_position:
+	if body.is_in_group("Player") and GameState.current_checkpoint > checkpoint_position:
 		add_child(confetti_particles)
 		$Timer.start()
 	else:
