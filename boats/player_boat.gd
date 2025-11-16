@@ -1,6 +1,6 @@
 extends RigidBody3D
 
-@export var float_force = 1.0
+@export var float_force = 0.03
 @export var water_drag = 0.05
 @export var water_angular_drag = 0.05
 
@@ -14,35 +14,33 @@ var submerged = false
 
 func _physics_process(_delta: float) -> void:
 	submerged = false
-	var X = (global_position.x - (30 - 20)) * 12.5
-	var Y = (global_position.z - (30 - 20)) * 12.5
-	print(X)
-	print(Y)
-	print("\n")
 	
 	var pos = Vector2(global_position.x,global_position.z)
-	var dist:float = pos.distance_to(hmap.keys()[0])
+	var dist:float = pos.distance_to(GameState.TILES.keys()[0])
 	
 	var tile = Vector2i(30,30)
 	
-	for key in hmap.keys():
+	for key in GameState.TILES.keys():
 		var newdist = pos.distance_to(key)
 		if(newdist <= dist):
 			dist = newdist
 			tile = key
 	
-	var map = hmap.get(tile).get_image()
+	var map = GameState.TILES.get(tile).get_image()
 	
 	for f in floats:
 		var wheight = f.get_water_height(map,tile)
-		print(wheight)
+		#print(wheight)
 		#var depth = water_height - f.global_position.y
 		var depth = wheight - f.global_position.y
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)
 	
-	apply_central_force(transform.basis * Vector3.FORWARD * 20)
+	var movbas = Basis(transform.basis)
+	movbas.y = Vector3(0,0,0)
+	
+	apply_central_force(movbas * Vector3.FORWARD * 20)
 
 	if Input.is_action_pressed("turn_left"):
 		apply_torque(Vector3(0,20,0))
