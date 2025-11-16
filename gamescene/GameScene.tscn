@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://drhaetfip1gl5"]
+[gd_scene load_steps=10 format=3 uid="uid://drhaetfip1gl5"]
 
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="1_5wo1p"]
 [ext_resource type="Script" uid="uid://cwpj0xo3rhwtg" path="res://gamescene/game_scene.gd" id="1_g1wnh"]
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="2_v4nbw"]
-[ext_resource type="PackedScene" uid="uid://dgoryobiub8kq" path="res://gamescene/sim.tscn" id="5_q14gy"]
 [ext_resource type="PackedScene" uid="uid://dqgippdu4tayh" path="res://gamescene/ocean.tscn" id="5_wt214"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5wo1p"]
@@ -28,7 +27,6 @@ script = ExtResource("1_g1wnh")
 
 [node name="PlayerBoat" parent="." instance=ExtResource("1_5wo1p")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28878975, 2.1695988, -0.38592625)
-gravity_scale = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -0.030986786, 0.060009956, 0.0519495)
@@ -56,8 +54,5 @@ shape = SubResource("CapsuleShape3D_v4nbw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("SphereMesh_oulel")
-
-[node name="Sim" parent="." instance=ExtResource("5_q14gy")]
-visible = false
 
 [node name="Ocean" parent="." instance=ExtResource("5_wt214")]

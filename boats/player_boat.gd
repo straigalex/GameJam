@@ -30,15 +30,12 @@ func _physics_process(_delta: float) -> void:
 	
 	for f in floats:
 		var wheight = f.get_water_height(map,tile)
-		#print(wheight)
-		#var depth = water_height - f.global_position.y
 		var depth = wheight - f.global_position.y
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)
 	
-	var movbas = Basis(transform.basis)
-	movbas.y = Vector3(0,0,0)
+	var movbas = Basis(transform.basis.x,Vector3(0,0,0),transform.basis.z)
 	
 	apply_central_force(movbas * Vector3.FORWARD * 20)
 
