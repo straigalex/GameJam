@@ -50,3 +50,5 @@ func restart_level():
 
 func next_level():
 	current_level += 1
+
+var TILES:Dictionary[Vector2i,ViewportTexture]
