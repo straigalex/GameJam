@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bni65b3dleov0"]
+
+[ext_resource type="FontFile" uid="uid://b7540wfbnwj2d" path="res://assets/fonts/Scabber-q2Mn0.ttf" id="1_01tsi"]
+
+[resource]
+font = ExtResource("1_01tsi")
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)

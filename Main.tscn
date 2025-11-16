@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://cdm0ad61ogtvf"]
+
+[ext_resource type="Script" uid="uid://d3jbvikypcx4w" path="res://main.gd" id="1_glv2v"]
+[ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="2_uu6xs"]
+[ext_resource type="PackedScene" uid="uid://bsbtpp84pdo2k" path="res://ui/GameUI.tscn" id="3_r0du0"]
+[ext_resource type="PackedScene" uid="uid://dqgippdu4tayh" path="res://gamescene/ocean.tscn" id="5_fos0i"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_glv2v"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_uu6xs"]
+transparency = 1
+albedo_color = Color(0.28235295, 0.5921569, 1, 0.8156863)
+
+[node name="Main" type="Node"]
+script = ExtResource("1_glv2v")
+
+[node name="Water" type="MeshInstance3D" parent="."]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, 0, 0)
+visible = false
+mesh = SubResource("PlaneMesh_glv2v")
+skeleton = NodePath("../PlayerBoat/Camera3D")
+surface_material_override/0 = SubResource("StandardMaterial3D_uu6xs")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94832367, 0.31730464, 0, -0.31730464, 0.94832367, 0, 10, 0)
+
+[node name="GameUI" parent="." instance=ExtResource("3_r0du0")]
+unique_name_in_owner = true
+
+[node name="Ocean" parent="." instance=ExtResource("5_fos0i")]
+
+[node name="PlayerBoat" parent="." instance=ExtResource("2_uu6xs")]
+mass = 3.0
+float_force = 0.05

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=4 uid="uid://d1o1w0v7ft4uh"]
 
-[ext_resource type="PackedScene" uid="uid://dcysh6hci48ft" path="res://assets/sailboat.blend" id="1_2uhvd"]
+[ext_resource type="PackedScene" uid="uid://dcysh6hci48ft" path="res://assets/blender/sailboat.blend" id="1_2uhvd"]
 [ext_resource type="Script" uid="uid://c6mdh8t235m2e" path="res://boats/player_boat.gd" id="1_dw7do"]
 [ext_resource type="Script" uid="uid://ctsos33aldh54" path="res://boats/camera_controller.gd" id="3_kum0p"]
 [ext_resource type="Script" uid="uid://r074qlvwpw4r" path="res://boats/find_water_height.gd" id="3_w74yu"]
@@ -45,7 +45,8 @@ shadow_mesh = SubResource("ArrayMesh_d0c7e")
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
-[node name="PlayerBoat" type="RigidBody3D"]
+[node name="PlayerBoat" type="RigidBody3D" groups=["Player"]]
+collision_mask = 3
 gravity_scale = 0.5
 linear_damp = 1.0
 angular_damp = 1.0
@@ -53,7 +54,7 @@ script = ExtResource("1_dw7do")
 float_force = 0.01
 water_angular_drag = 0.1
 
-[node name="sailboat" parent="." instance=ExtResource("1_2uhvd")]
+[node name="sailboat_model" parent="." instance=ExtResource("1_2uhvd")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -84,6 +85,7 @@ spring_length = 6.0
 script = ExtResource("3_kum0p")
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+current = true
 cull_mask = 524287
 
 [node name="Sphere" type="MeshInstance3D" parent="."]
