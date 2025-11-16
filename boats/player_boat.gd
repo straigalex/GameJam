@@ -35,9 +35,10 @@ func _physics_process(_delta: float) -> void:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)
 	
-	var movbas = Basis(transform.basis.x,Vector3(0,0,0),transform.basis.z)
+	var point = transform.basis * Vector3.FORWARD
+	var dir = Vector3(point.x,0,point.z)
 	
-	apply_central_force(movbas * Vector3.FORWARD * 20)
+	apply_central_force(dir * 40)
 
 	if Input.is_action_pressed("turn_left"):
 		apply_torque(Vector3(0,20,0))
