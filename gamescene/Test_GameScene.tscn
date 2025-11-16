@@ -1,55 +1,30 @@
-[gd_scene load_steps=20 format=3 uid="uid://bg8v8gc4eshws"]
+[gd_scene load_steps=13 format=3 uid="uid://bg8v8gc4eshws"]
 
-[ext_resource type="Shader" uid="uid://dyuekrltpegb0" path="res://gamescene/simulation.gdshader" id="1_8veki"]
-[ext_resource type="Shader" uid="uid://br5t6nuvh13mf" path="res://gamescene/main.tres" id="2_nj4wf"]
+[ext_resource type="PackedScene" uid="uid://dgoryobiub8kq" path="res://gamescene/sim.tscn" id="1_8veki"]
 
 [sub_resource type="GDScript" id="GDScript_8veki"]
+resource_local_to_scene = true
 script/source = "extends Node3D
+
+var simtex
 
 func _ready():
 	#recomended in https://www.youtube.com/watch?v=VSwVwIYEypY
 	#deeply cursed.
-	var cr = $Simulation/ColorRect
-	var water = $Water
-	var sim_tex = $Simulation.get_texture()#.duplicate()
-	var col_tex = $Collision.get_texture()#.duplicate()
+	#var cr = $Sim/Simulation/ColorRect
+	#var water = $Sim/Water
+	#var sim_tex = $Sim/Simulation.get_texture()#.duplicate()
+	#var col_tex = $Sim/Collision.get_texture()#.duplicate()
+	#simtex = sim_tex
 	
-	cr.material.set_shader_parameter('sim_tex', sim_tex)
-	cr.material.set_shader_parameter('col_tex', col_tex)
+	#cr.material.set_shader_parameter('sim_tex', sim_tex)
+	#cr.material.set_shader_parameter('col_tex', col_tex)
 	
-	water.mesh.surface_get_material(0).set_shader_parameter('simulation',sim_tex)
+	#water.mesh.surface_get_material(0).set_shader_parameter('simulation',sim_tex)
 	
-	$Node3D/AnimationPlayer.play()
+	#$Node3D/AnimationPlayer.play()
 	pass
 "
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_nj4wf"]
-viewport_path = NodePath("Collision")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_41f4a"]
-resource_local_to_scene = true
-shader = ExtResource("1_8veki")
-shader_parameter/col_tex = SubResource("ViewportTexture_nj4wf")
-shader_parameter/phase = 0.2
-shader_parameter/attenuation = 0.999
-shader_parameter/deltaUV = 3.0
-
-[sub_resource type="ViewportTexture" id="ViewportTexture_41f4a"]
-viewport_path = NodePath("Simulation")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_rkbcg"]
-resource_local_to_scene = true
-render_priority = 0
-shader = ExtResource("2_nj4wf")
-shader_parameter/simulation = SubResource("ViewportTexture_41f4a")
-shader_parameter/Amp = 0.5
-shader_parameter/FloatParameter = 0.5
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_0hup2"]
-material = SubResource("ShaderMaterial_rkbcg")
-size = Vector2(10, 10)
-subdivide_width = 1000
-subdivide_depth = 1000
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nj4wf"]
 
@@ -58,9 +33,6 @@ material = SubResource("StandardMaterial3D_nj4wf")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_nj4wf"]
 size = Vector2(15, 15)
-
-[sub_resource type="Environment" id="Environment_nj4wf"]
-background_mode = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_nj4wf"]
 
@@ -104,33 +76,22 @@ _data = {
 &"new_animation": SubResource("Animation_nj4wf")
 }
 
-[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_41f4a"]
+[sub_resource type="ORMMaterial3D" id="ORMMaterial3D_8veki"]
 shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_rkbcg"]
-material = SubResource("ORMMaterial3D_41f4a")
+resource_local_to_scene = true
+material = SubResource("ORMMaterial3D_8veki")
 
 [node name="TestGameScene" type="Node3D"]
 script = SubResource("GDScript_8veki")
 
-[node name="Simulation" type="SubViewport" parent="."]
-render_target_clear_mode = 2
-render_target_update_mode = 4
-
-[node name="ColorRect" type="ColorRect" parent="Simulation"]
-material = SubResource("ShaderMaterial_41f4a")
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Water" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_0hup2")
+[node name="Sim" parent="." instance=ExtResource("1_8veki")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(9.278516, 0, 0, 0, 5.9842944, 0, 0, 0, 1, 0, 0, 5.5794525)
+visible = false
 layers = 524289
 mesh = SubResource("BoxMesh_nj4wf")
 
@@ -146,22 +107,8 @@ mesh = SubResource("PlaneMesh_nj4wf")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.8211891, 0.57065624, 0, -0.57065624, -0.8211891, 0, 4.367565, -12.804132)
 
-[node name="Collision" type="SubViewport" parent="."]
-render_target_clear_mode = 2
-render_target_update_mode = 4
-
-[node name="WaterCam" type="Camera3D" parent="Collision"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -5, 0)
-cull_mask = 524288
-environment = SubResource("Environment_nj4wf")
-projection = 1
-current = true
-size = 10.0
-
-[node name="SubSimulation" type="SubViewport" parent="."]
-
 [node name="Node3D" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.7919002)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.98294, -0.12664223, 18.224901)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
 mesh = SubResource("SphereMesh_nj4wf")

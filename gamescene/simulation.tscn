@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://tvbggfehb1vn"]
+
+[ext_resource type="Shader" uid="uid://dyuekrltpegb0" path="res://gamescene/simulation.gdshader" id="1_eyewa"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_nj4wf"]
+viewport_path = NodePath("Collision")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_41f4a"]
+resource_local_to_scene = true
+shader = ExtResource("1_eyewa")
+shader_parameter/col_tex = SubResource("ViewportTexture_nj4wf")
+shader_parameter/phase = 0.2
+shader_parameter/attenuation = 0.999
+shader_parameter/deltaUV = 3.0
+
+[node name="Simulation" type="SubViewport"]
+size = Vector2i(500, 500)
+render_target_clear_mode = 2
+render_target_update_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_41f4a")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
