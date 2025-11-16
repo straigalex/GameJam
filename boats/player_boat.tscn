@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=4 uid="uid://d1o1w0v7ft4uh"]
+[gd_scene load_steps=10 format=4 uid="uid://d1o1w0v7ft4uh"]
 
 [ext_resource type="PackedScene" uid="uid://dcysh6hci48ft" path="res://assets/sailboat.blend" id="1_2uhvd"]
 [ext_resource type="Script" uid="uid://c6mdh8t235m2e" path="res://boats/player_boat.gd" id="1_dw7do"]
 [ext_resource type="Script" uid="uid://ctsos33aldh54" path="res://boats/camera_controller.gd" id="3_kum0p"]
+[ext_resource type="Script" uid="uid://r074qlvwpw4r" path="res://boats/find_water_height.gd" id="3_w74yu"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_kum0p"]
 radius = 0.97998047
@@ -45,6 +46,7 @@ shading_mode = 0
 albedo_color = Color(1, 0, 0, 1)
 
 [node name="PlayerBoat" type="RigidBody3D"]
+gravity_scale = 0.5
 linear_damp = 1.0
 angular_damp = 1.0
 script = ExtResource("1_dw7do")
@@ -62,22 +64,27 @@ shape = SubResource("CapsuleShape3D_kum0p")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.36937183, 0)
 
 [node name="Marker3D" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0297174, 0, 0.643162)
+script = ExtResource("3_w74yu")
 
 [node name="Marker3D2" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0090567, 0, 0.6587845)
+script = ExtResource("3_w74yu")
 
 [node name="Marker3D3" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9632123, 0, -0.6277634)
+script = ExtResource("3_w74yu")
 
 [node name="Marker3D4" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5, 0, -1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0522768, 0, -0.6353322)
+script = ExtResource("3_w74yu")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
 spring_length = 6.0
 script = ExtResource("3_kum0p")
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+cull_mask = 524287
 
 [node name="Sphere" type="MeshInstance3D" parent="."]
 transform = Transform3D(-7.0192456e-08, 0, 1, 0, 1, 0, -1.6058162, 0, -4.371139e-08, 0, 0, 0)
