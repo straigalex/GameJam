@@ -64,23 +64,19 @@ shape = SubResource("CapsuleShape3D_kum0p")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.36937183, 0)
 
 [node name="Marker3D" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0297174, 0, 0.643162)
 script = ExtResource("3_w74yu")
 
 [node name="Marker3D2" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0090567, 0, 0.6587845)
 script = ExtResource("3_w74yu")
 
 [node name="Marker3D3" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, -0.8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.9632123, 0, -0.6277634)
 script = ExtResource("3_w74yu")
 
 [node name="Marker3D4" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4, 0, -0.5)
-script = ExtResource("3_w74yu")
-
-[node name="Marker3D5" type="Marker3D" parent="FloatContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.4398386, 0.24639356, 6.2937346e-08)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0522768, 0, -0.6353322)
 script = ExtResource("3_w74yu")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]

@@ -10,10 +10,7 @@ script/source = "extends Node3D
 var simtex:ViewportTexture
 
 func _ready():
-	#cam.global_position.x = global_position.x
-	#cam.global_position.z = global_position.z
 	simtex = $Simulation.get_texture()
-	pass
 
 func update_camera():
 	cam.global_position.x = global_position.x
@@ -46,10 +43,6 @@ resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_1ynhv")
 shader_parameter/simulation = SubResource("ViewportTexture_edp6i")
-shader_parameter/X_Multiplier = 1.0
-shader_parameter/Y_Multiplier = 1.0
-shader_parameter/X_Offset = 0.0
-shader_parameter/Y_Offset = 0.0
 shader_parameter/Amp = 0.5
 shader_parameter/FloatParameter = 0.5
 
