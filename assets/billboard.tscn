@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://6o74f8i86s3"]
+
+[ext_resource type="PackedScene" uid="uid://b3dbqshw5jd6f" path="res://assets/blender/billboard.blend" id="1_ywif1"]
+[ext_resource type="FontFile" uid="uid://b7540wfbnwj2d" path="res://assets/fonts/Scabber-q2Mn0.ttf" id="2_328bx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywif1"]
+albedo_color = Color(0.5624182, 0.5624183, 0.5624183, 1)
+metallic = 0.47
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_328bx"]
+albedo_color = Color(0.6646471, 0.6646471, 0.6646471, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i7wqv"]
+albedo_color = Color(0.72996247, 0.6642731, 0.0935607, 1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_328bx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_328bx"]
+size = Vector3(3.213, 39.391, 3.166)
+
+[node name="billboard" instance=ExtResource("1_ywif1")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+
+[node name="Cube_010" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ywif1")
+
+[node name="Cube_011" parent="." index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_328bx")
+
+[node name="Torus" parent="." index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_i7wqv")
+
+[node name="Label3D" type="Label3D" parent="." index="3"]
+transform = Transform3D(1.4895529, 0, 0, 0, 1.4895529, 0, 0, 0, 1.4895529, 14.727011, 21.153202, 1.0887357)
+text = "Start"
+font = ExtResource("2_328bx")
+font_size = 1109
+
+[node name="Label3D2" type="Label3D" parent="." index="4"]
+transform = Transform3D(-1.4895529, 0, 1.3022084e-07, 0, 1.4895529, 0, -1.3022084e-07, 0, -1.4895529, 15.082052, 21.153202, -1.4979146)
+text = "Start"
+font = ExtResource("2_328bx")
+font_size = 1109
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="5"]
+physics_material_override = SubResource("PhysicsMaterial_328bx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+shape = SubResource("BoxShape3D_328bx")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D" index="1"]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 29.618, 0, 0)
+shape = SubResource("BoxShape3D_328bx")

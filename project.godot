@@ -10,10 +10,14 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
+config/name="Sail Game"
 run/main_scene="uid://drhaetfip1gl5"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://assets/icon.svg"
+
+[autoload]
+
+Globals="*res://gamescene/Globals.gd"
 
 [global_group]
 

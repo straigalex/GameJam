@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dcysh6hci48ft"
-path="res://.godot/imported/sailboat.blend-e6574d92e152b3061d402265021b80a4.scn"
+uid="uid://b3dbqshw5jd6f"
+path="res://.godot/imported/billboard.blend-b6c27c7383e4c8ea41d3a60aa55f05a2.scn"
 
 [deps]
 
-source_file="res://assets/sailboat.blend"
-dest_files=["res://.godot/imported/sailboat.blend-e6574d92e152b3061d402265021b80a4.scn"]
+source_file="res://assets/blender/billboard.blend"
+dest_files=["res://.godot/imported/billboard.blend-b6c27c7383e4c8ea41d3a60aa55f05a2.scn"]
 
 [params]
 

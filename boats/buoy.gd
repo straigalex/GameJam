@@ -4,11 +4,20 @@ extends RigidBody3D
 @export var float_force = 1.0
 @export var water_drag = 0.05
 @export var water_angular_drag = 0.05
+@export var player_node = null
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
+var confetti_particles = preload("res://assets/confetti_particle.tscn").instantiate()
 
 const water_height = 0.0
 var submerged = false
+
+# Colouring
+@onready var buoy_mesh = %BuoyModel/Sphere
+
+const active_color := Color8(0,255,0) # Green
+const next_color := Color8(255,255,0) # Yellow
+const other_color := Color8(100,100,100) # Grey
 
 # Checkpoint
 enum buoy_directions {
@@ -21,12 +30,21 @@ signal buoy_entered(buoy_node: RigidBody3D, index: int)
 @export var checkpoint_position = -1
 @export var required_direction = buoy_directions.PORT_SIDE
 
-@onready var buoy_facing: Marker3D = %Marker3D
 @onready var checkpoint = %CheckpointArea
 @onready var label = $Label3D
 
+
 func _ready() -> void:
-	label.text = "Checkpoint " + str(checkpoint_position) 
+	label.text = str(checkpoint_position)
+	if required_direction == buoy_directions.PORT_SIDE:
+		%Arrow.rotate_x(PI)
+	updade_checkpoint_color(1)
+
+func _process(delta: float) -> void:
+	if required_direction == buoy_directions.PORT_SIDE:
+		%Arrow.rotate_y(PI/2 * delta)
+	else:
+		%Arrow.rotate_y(-PI/2 * delta)
 
 func _physics_process(delta: float) -> void:
 	var depth = water_height - global_position.y
@@ -41,22 +59,42 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		state.angular_velocity *= 1 - water_angular_drag
 
 
-func is_correct_side(boat_position: Vector3) -> bool:
-	var side_vector = (buoy_facing.global_position - global_position).normalized()
-	var player_vector = (boat_position - global_position).normalized()
+func is_correct_side(boat_position: Vector3, boat_forward: Vector3) -> bool:
+	# Based on heading when boat enters
+	var buoy_vector = (global_position - boat_position).normalized()
 
-	var correct_side_vector = side_vector.cross(Vector3.UP).normalized()
-
-	var dot = player_vector.dot(correct_side_vector)
+	var side = boat_forward.cross(buoy_vector).dot(Vector3.UP)
 
 	if required_direction == buoy_directions.PORT_SIDE:
-		return dot < 0
+		return side > 0
 	elif required_direction == buoy_directions.STARBOARD_SIDE:
-		return dot > 0
+		return side < 0
 	
-
+	push_error("is_correct_side side not set")
 	return false
+
+func updade_checkpoint_color(current_checkpoint: int) -> void:
+	var mat : StandardMaterial3D = buoy_mesh.get_surface_override_material(0)
+	if(checkpoint_position == current_checkpoint):
+		mat.albedo_color = active_color
+	elif(checkpoint_position == current_checkpoint + 1):
+		mat.albedo_color = next_color
+	else:
+		mat.albedo_color = other_color
 
 func _on_checkpoint_area_body_entered(body: Node3D) -> void:
 	if body.is_in_group("Player"):
 		emit_signal("buoy_entered", self, checkpoint_position)
+		%Arrow.hide()
+
+
+func _on_checkpoint_area_body_exited(body: Node3D) -> void:
+	if body.is_in_group("Player") and Globals.current_checkpoint > checkpoint_position:
+		add_child(confetti_particles)
+		$Timer.start()
+	else:
+		%Arrow.show()
+
+
+func _on_timer_timeout() -> void:
+	hide()
