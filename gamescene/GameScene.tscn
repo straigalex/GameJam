@@ -26,9 +26,8 @@ height = 10.0
 script = ExtResource("1_g1wnh")
 
 [node name="PlayerBoat" parent="." instance=ExtResource("1_5wo1p")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28878975, 2.1695988, -0.38592625)
-float_force = 0.07
-water_drag = 0.03
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28878975, 0.66880155, -0.38592625)
+float_force = 0.01
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, -0.030986786, 0.060009956, 0.0519495)

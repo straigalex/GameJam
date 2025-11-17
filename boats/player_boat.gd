@@ -12,6 +12,9 @@ var hmap:Dictionary[Vector2i,ViewportTexture]
 const water_height = 0.0
 var submerged = false
 
+func _ready():
+	$CollisionShape3D.shape = $Sphere.mesh.create_convex_shape()
+
 func _physics_process(_delta: float) -> void:
 	submerged = false
 	
@@ -34,11 +37,12 @@ func _physics_process(_delta: float) -> void:
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)
+	#print($FloatContainer/Marker3D6.get_water_height(map,tile))
 	
 	var point = transform.basis * Vector3.FORWARD
 	var dir = Vector3(point.x,0,point.z)
 	
-	apply_central_force(dir * 40)
+	apply_central_force(dir * 60)
 
 	if Input.is_action_pressed("turn_left"):
 		apply_torque(Vector3(0,20,0))
