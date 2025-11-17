@@ -1,11 +1,19 @@
 extends RigidBody3D
 
-@export var float_force = 0.03
+@export var float_force = 0.01
 @export var water_drag = 0.05
 @export var water_angular_drag = 0.05
 
+@export var acceleration = 30.0
+@export var decceleration = 30.0
+
+@export var topspeed = 30.133
+@export var minspeed = 0
+
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var floats = $FloatContainer.get_children()
+
+var velocity:float = minspeed
 
 var hmap:Dictionary[Vector2i,ViewportTexture]
 
@@ -15,7 +23,7 @@ var submerged = false
 func _ready():
 	$CollisionShape3D.shape = $Sphere.mesh.create_convex_shape()
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	submerged = false
 	
 	var pos = Vector2(global_position.x,global_position.z)
@@ -42,12 +50,16 @@ func _physics_process(_delta: float) -> void:
 	var point = transform.basis * Vector3.FORWARD
 	var dir = Vector3(point.x,0,point.z)
 	
-	apply_central_force(dir * 60)
+	apply_central_force(dir * velocity)
 
 	if Input.is_action_pressed("turn_left"):
 		apply_torque(Vector3(0,20,0))
 	if Input.is_action_pressed("turn_right"):
 		apply_torque(Vector3(0,-20,0))
+	if Input.is_action_pressed("forward") and velocity <= topspeed:
+		velocity = velocity + (acceleration * delta)
+	if Input.is_action_pressed("backward") and velocity >= minspeed:
+		velocity = velocity - (decceleration * delta)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if submerged:
