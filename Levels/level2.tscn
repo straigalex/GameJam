@@ -1,0 +1,74 @@
+[gd_scene load_steps=11 format=3 uid="uid://b34oda4y0v4p6"]
+
+[ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="1_m135w"]
+[ext_resource type="PackedScene" uid="uid://6o74f8i86s3" path="res://assets/startline.tscn" id="1_ty1rc"]
+[ext_resource type="PackedScene" uid="uid://bsctpcri84ktt" path="res://assets/finishline.tscn" id="2_m135w"]
+[ext_resource type="PackedScene" uid="uid://cha2mgvpbd6rg" path="res://assets/palmtree.tscn" id="4_pcft3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_pcft3"]
+bounce = 0.84
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_p0prn"]
+radius = 20.0
+height = 43.49
+
+[sub_resource type="SphereMesh" id="SphereMesh_dj5hn"]
+radius = 20.0
+height = 10.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_m135w"]
+frequency = 0.5729
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pcft3"]
+noise = SubResource("FastNoiseLite_m135w")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p0prn"]
+albedo_color = Color(0.87058824, 0.74509805, 0.09411765, 1)
+metallic = 1.0
+metallic_specular = 0.0
+metallic_texture = SubResource("NoiseTexture2D_pcft3")
+
+[node name="Level2" type="Node3D"]
+
+[node name="Buoy" parent="." instance=ExtResource("1_m135w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.6274481, 3.0357132, -33.710102)
+float_force = 0.5
+checkpoint_position = 1
+required_direction = 1
+
+[node name="Buoy2" parent="." instance=ExtResource("1_m135w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.703484, 3.0357132, -51.438683)
+float_force = 0.5
+checkpoint_position = 2
+
+[node name="Buoy3" parent="." instance=ExtResource("1_m135w")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28.66737, 3.0357132, -116.26903)
+float_force = 0.5
+checkpoint_position = 3
+
+[node name="StartLine" parent="." instance=ExtResource("1_ty1rc")]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -4.7670803, 0, -18.56514)
+
+[node name="FinishLine" parent="." instance=ExtResource("2_m135w")]
+unique_name_in_owner = true
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -50.55392, 0, -129.05241)
+
+[node name="Island" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.51685333, 0, -70.04332)
+physics_material_override = SubResource("PhysicsMaterial_pcft3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Island"]
+shape = SubResource("CapsuleShape3D_p0prn")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Island"]
+mesh = SubResource("SphereMesh_dj5hn")
+surface_material_override/0 = SubResource("StandardMaterial3D_p0prn")
+
+[node name="palmtree" parent="." instance=ExtResource("4_pcft3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1490154, 4.5437317, -57.703884)
+
+[node name="palmtree2" parent="." instance=ExtResource("4_pcft3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.778452, 4.9428587, -66.88406)
+
+[node name="palmtree3" parent="." instance=ExtResource("4_pcft3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1836529, 4.9428587, -80.04933)

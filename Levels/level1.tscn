@@ -1,47 +1,75 @@
-[gd_scene load_steps=7 format=3 uid="uid://dwwuyibgiv77w"]
+[gd_scene load_steps=11 format=3 uid="uid://dwwuyibgiv77w"]
 
 [ext_resource type="PackedScene" uid="uid://cyrkxtyhggewg" path="res://boats/buoy.tscn" id="1_fy36t"]
 [ext_resource type="PackedScene" uid="uid://6o74f8i86s3" path="res://assets/startline.tscn" id="2_njhy2"]
 [ext_resource type="PackedScene" uid="uid://bsctpcri84ktt" path="res://assets/finishline.tscn" id="3_m6f6w"]
+[ext_resource type="PackedScene" uid="uid://cha2mgvpbd6rg" path="res://assets/palmtree.tscn" id="4_njhy2"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fy36t"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_m6f6w"]
 bounce = 0.84
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_njhy2"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_302sc"]
 radius = 20.0
 height = 43.49
 
-[sub_resource type="SphereMesh" id="SphereMesh_m6f6w"]
+[sub_resource type="SphereMesh" id="SphereMesh_aunfx"]
 radius = 20.0
 height = 10.0
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_j32wv"]
+frequency = 0.5729
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pcft3"]
+noise = SubResource("FastNoiseLite_j32wv")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nq5j5"]
+albedo_color = Color(0.87058824, 0.74509805, 0.09411765, 1)
+metallic = 1.0
+metallic_specular = 0.0
+metallic_texture = SubResource("NoiseTexture2D_pcft3")
 
 [node name="Level1" type="Node3D"]
 
 [node name="Buoy" parent="." instance=ExtResource("1_fy36t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.079176, 0, -33.710102)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.765286, 3.2437286, -35.407658)
+float_force = 0.5
 checkpoint_position = 1
+required_direction = 1
 
 [node name="Buoy2" parent="." instance=ExtResource("1_fy36t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -59.266243)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2437286, -55.713223)
+float_force = 0.5
 checkpoint_position = 2
+required_direction = 1
 
 [node name="Buoy3" parent="." instance=ExtResource("1_fy36t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.994502, 0, -42.55803)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.994502, 3.2437286, -42.55803)
+float_force = 0.5
 checkpoint_position = 3
-required_direction = 1
 
 [node name="StartLine" parent="." instance=ExtResource("2_njhy2")]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -4.7670803, 0, -18.56514)
 
 [node name="FinishLine" parent="." instance=ExtResource("3_m6f6w")]
+unique_name_in_owner = true
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, -4.8893433, 0, -83.89363)
 
-[node name="Island" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.97557, 0, -70.04332)
-physics_material_override = SubResource("PhysicsMaterial_fy36t")
+[node name="Island2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.79766, 0, -61.84473)
+physics_material_override = SubResource("PhysicsMaterial_m6f6w")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Island"]
-shape = SubResource("CapsuleShape3D_njhy2")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Island2"]
+shape = SubResource("CapsuleShape3D_302sc")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Island"]
-mesh = SubResource("SphereMesh_m6f6w")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Island2"]
+mesh = SubResource("SphereMesh_aunfx")
+surface_material_override/0 = SubResource("StandardMaterial3D_nq5j5")
+
+[node name="palmtree2" parent="." instance=ExtResource("4_njhy2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.429825, 4.5437317, -49.505295)
+
+[node name="palmtree3" parent="." instance=ExtResource("4_njhy2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.502356, 4.9428587, -58.685474)
+
+[node name="palmtree4" parent="." instance=ExtResource("4_njhy2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42.464462, 4.9428587, -71.85074)

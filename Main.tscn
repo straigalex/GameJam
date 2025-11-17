@@ -32,3 +32,4 @@ unique_name_in_owner = true
 [node name="PlayerBoat" parent="." instance=ExtResource("2_uu6xs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91017294, 0)
 acceleration = 20.0
+unique_name_in_owner = true

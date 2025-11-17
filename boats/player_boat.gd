@@ -1,6 +1,7 @@
 extends RigidBody3D
 
 @export var float_force = 0.01
+@export var float_force = 0.01
 @export var water_drag = 0.05
 @export var water_angular_drag = 0.05
 
