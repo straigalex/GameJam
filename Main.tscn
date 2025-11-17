@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cdm0ad61ogtvf"]
+[gd_scene load_steps=8 format=3 uid="uid://cdm0ad61ogtvf"]
 
 [ext_resource type="Script" uid="uid://d3jbvikypcx4w" path="res://main.gd" id="1_glv2v"]
 [ext_resource type="PackedScene" uid="uid://d1o1w0v7ft4uh" path="res://boats/player_boat.tscn" id="2_uu6xs"]
 [ext_resource type="PackedScene" uid="uid://bsbtpp84pdo2k" path="res://ui/GameUI.tscn" id="3_r0du0"]
+[ext_resource type="AudioStream" uid="uid://kiaorgjjgehm" path="res://assets/826622__xkeril__memories-of-a-sweet-summer-music-loop.wav" id="5_3dxm6"]
 [ext_resource type="PackedScene" uid="uid://dqgippdu4tayh" path="res://gamescene/ocean.tscn" id="5_fos0i"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_glv2v"]
@@ -30,6 +31,11 @@ unique_name_in_owner = true
 [node name="Ocean" parent="." instance=ExtResource("5_fos0i")]
 
 [node name="PlayerBoat" parent="." instance=ExtResource("2_uu6xs")]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.91017294, 0)
 acceleration = 20.0
-unique_name_in_owner = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_3dxm6")
+volume_db = -37.853
+autoplay = true
