@@ -2,16 +2,18 @@ extends RigidBody3D
 
 @export var float_force = 0.01
 @export var water_drag = 0.05
-@export var water_angular_drag = 0.05
+@export var water_angular_drag = 0.09
 
 @export var acceleration = 30.0
 @export var decceleration = 30.0
 
-@export var topspeed = 30.133
-@export var minspeed = 0
+@export var topspeed = 60.133
+@export var minspeed = 15
 
 @onready var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 @onready var floats = $FloatContainer.get_children()
+
+@onready var ripplesound = $AudioStreamPlayer
 
 var velocity:float = minspeed
 
@@ -19,6 +21,8 @@ var hmap:Dictionary[Vector2i,ViewportTexture]
 
 const water_height = 0.0
 var submerged = false
+
+var disruption = 0
 
 func _ready():
 	$CollisionShape3D.shape = $Sphere.mesh.create_convex_shape()
@@ -42,6 +46,7 @@ func _physics_process(delta: float) -> void:
 	for f in floats:
 		var wheight = f.get_water_height(map,tile)
 		var depth = wheight - f.global_position.y
+		disruption += wheight
 		if depth > 0:
 			submerged = true
 			apply_force(Vector3.UP * float_force * gravity * depth, f.global_position - global_position)

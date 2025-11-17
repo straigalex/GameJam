@@ -5,10 +5,10 @@ var sim = preload("res://gamescene/sim.tscn")
 var tiles:Dictionary[Vector2i, ViewportTexture]
 
 func _ready():
-	var x = -80
-	var y = -80
-	while(x < 80):
-		while(y < 80):
+	var x = -120
+	var y = -120
+	while(x < 120):
+		while(y < 120):
 			var simuli = sim.instantiate()
 			add_child(simuli)
 			simuli.owner = self
@@ -17,7 +17,7 @@ func _ready():
 			simuli.update_camera()
 			tiles.set(Vector2i(x+10,y+10),simuli.simtex)
 			y += 20
-		y = -80
+		y = -120
 		x += 20
 	
 	GameState.TILES = tiles
