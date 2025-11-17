@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cha2mgvpbd6rg"]
+
+[ext_resource type="PackedScene" uid="uid://c4vsa8i3gmklo" path="res://assets/blender/palmtree.blend" id="1_ehm67"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ehm67"]
+albedo_color = Color(0.6784314, 0.39215687, 0.07058824, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d14k4"]
+albedo_color = Color(0.5409987, 0.27036998, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lij5q"]
+albedo_color = Color(0.22886452, 0.71618485, 5.7756904e-07, 1)
+
+[node name="palmtree" instance=ExtResource("1_ehm67")]
+
+[node name="Cone" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_ehm67")
+
+[node name="Sphere" parent="." index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_d14k4")
+
+[node name="Cube_001" parent="." index="2"]
+surface_material_override/0 = SubResource("StandardMaterial3D_lij5q")

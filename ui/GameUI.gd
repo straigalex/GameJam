@@ -1,5 +1,8 @@
 extends Control
 
+signal restart_pressed
+signal next_level_pressed
+
 func _ready() -> void:
 	%CheckpointLabel.text = "Current Goal: 1"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -21,14 +24,21 @@ func update_time(time_remaining: float):
 	%TimeRemainingLabel.text = "Time Remaining: " + format_time(time_remaining)
 
 func update_gamestate(state : GameState.state):
+	%NextLevelButton.hide()
 	if state == GameState.state.WON:
 		pause_game()
 		%GameStateLabel.text = "Level Complete"
 		%GameStateLabel.show()
+		%NextLevelButton.show()
 	elif state == GameState.state.LOST:
 		pause_game()
 		%GameStateLabel.text = "Level Failed"
 		%GameStateLabel.show()
+	elif state == GameState.state.PAUSED:
+		pause_game()
+	else:
+		%PauseMenu.hide()
+		resume_game()
 
 
 func format_time(t: float) -> String:
@@ -41,6 +51,8 @@ func format_time(t: float) -> String:
 func pause_game() -> void:
 	GameState.current_state = GameState.state.PAUSED
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	%GameStateLabel.text = "PAUSED"
+	%GameStateLabel.show()
 	%PauseMenu.show()
 	get_tree().paused = true
 
@@ -55,4 +67,8 @@ func _on_quit_button_pressed() -> void:
 	get_tree().quit()
 
 func _on_restart_button_pressed() -> void:
-	pass # Replace with function body.
+	emit_signal("restart_pressed")
+
+
+func _on_next_level_button_pressed() -> void:
+	emit_signal("next_level_pressed")
