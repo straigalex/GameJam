@@ -25,7 +25,7 @@ void fragment() {
 		texture(sim_tex, UV + duv.zy).r +
 		texture(sim_tex, UV - duv.xz).r +
 		texture(sim_tex, UV + duv.xz).r - 
-		4.0 * c.r)) * attenuation /1.009;
+		4.0 * c.r)) * attenuation /1.0; //.009;
 	
 	vec2 col_uv = vec2(UV.x, 1.0 - UV.y);
 	
